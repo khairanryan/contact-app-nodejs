@@ -1,19 +1,20 @@
-# contact-app-nodejs
+# Contact CLI App 📇
 
-A simple contact management application built with Node.js.  
-This app allows you to add, view, and manage contact information via the terminal.
+Aplikasi CLI sederhana untuk menyimpan, melihat, dan mengelola kontak menggunakan Node.js. Mendukung validasi input dan penyimpanan data ke file JSON.
 
-## 📦 Features
+## 📦 Fitur
 
-- Add new contact (name, phone, email)
-- List all contacts
-- View contact details
-- Save contacts to JSON file
+- Menambahkan kontak baru
+- Validasi:
+  - Nama tidak boleh duplikat
+  - Format email harus valid (jika diisi)
+  - Nomor HP harus valid (format Indonesia)
+- Menyimpan data ke dalam file `contacts.json`
 
-## 🚀 Getting Started
+## 🚀 Instalasi
 
-### 1. Clone the repository
+1. Clone repositori ini:
 
 ```bash
-git clone https://github.com/yourusername/contact-app-nodejs.git
-cd contact-app-nodejs
+git clone https://github.com/username/contact-cli-app.git
+cd contact-cli-app
