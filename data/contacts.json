@@ -1,1 +1,57 @@
-[{"nama":"Khairan","email":"khairan@yahoo.com","noHP":"0812312312"}]
+[
+  {
+    "nama": "Dinda Ayu",
+    "email": "dinda.ayu@gmail.com",
+    "noHP": "081234567890"
+  },
+  {
+    "nama": "Budi Santoso",
+    "email": "budi.santoso@yahoo.com",
+    "noHP": "082112223333"
+  },
+  {
+    "nama": "Sarah Maulida",
+    "email": "sarah.maulida@outlook.com",
+    "noHP": "085677889900"
+  },
+  {
+    "nama": "Reza Rahadian",
+    "email": "reza.r@gmail.com",
+    "noHP": "081333444555"
+  },
+  {
+    "nama": "Lintang Permata",
+    "email": "lintang.permata@gmail.com",
+    "noHP": "088811223344"
+  },
+  {
+    "nama": "Fajar Nugroho",
+    "email": "fajar.nugroho@mail.com",
+    "noHP": "081289765432"
+  },
+  {
+    "nama": "Nia Ramadhani",
+    "email": "nia.rama@ymail.com",
+    "noHP": "082234567123"
+  },
+  {
+    "nama": "Ilham Pratama",
+    "email": "ilham.pratama@outlook.com",
+    "noHP": "081389836881"
+  },
+  {
+    "nama": "Ilham Saldi",
+    "email": "ilham.saldi12@yahoo.com",
+    "noHP": "08131231232"
+  },
+  {
+    "nama": "Hadi",
+    "email": "hadi@outlook.com",
+    "noHP": "0812312311"
+  },
+  {
+    "nama": "Khairan",
+    "email": "khairan@outlook.com",
+    "noHP": "081389836888"
+  }
+]

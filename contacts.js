@@ -14,9 +14,9 @@ if (!fs.existsSync(dataPath)) {
   fs.writeFileSync(dataPath, "[]", "utf-8");
 }
 
-const simpanContact = (nama, email, noHP) => {
-  const contact = { nama, email, noHP };
-  const fileBuffer = fs.readFileSync("data/contacts.json", "utf-8");
+const simpanContact = (nama, email, nohp) => {
+  const contact = { nama, email, nohp };
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
   const contacts = JSON.parse(fileBuffer);
 
   // cek duplikat
@@ -29,23 +29,103 @@ const simpanContact = (nama, email, noHP) => {
   }
 
   // cek format email
-  if (email) {
-    if (!validator.isEmail(email)) {
-      console.log(chalk.red.inverse.bold("Email tidak valid!"));
-      return false;
-    }
+  if (email && !validator.isEmail(email)) {
+    console.log(chalk.red.inverse.bold("Email tidak valid!"));
+    return false;
   }
 
   // cek nomor hp
-  if (!validator.isMobilePhone(noHP, "id-ID")) {
+  if (!validator.isMobilePhone(nohp, "id-ID")) {
     console.log(chalk.red.inverse.bold("Nomor hp tidak valid!"));
     return false;
   }
 
   contacts.push(contact);
 
-  fs.writeFileSync("data/contacts.json", JSON.stringify(contacts));
+  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2));
   console.log(chalk.green.inverse.bold("Terimakasih telah isi data."));
 };
 
-module.exports = { simpanContact };
+const hapusContact = (nama) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  const filtered = contacts.filter(
+    (c) => c.nama.toLowerCase() !== nama.toLowerCase()
+  );
+
+  if (contacts.length === filtered.length) {
+    console.log(chalk.red.inverse("Kontak tidak ditemukan!"));
+  } else {
+    fs.writeFileSync(dataPath, JSON.stringify(filtered, null, 2));
+    console.log(chalk.green.inverse("Kontak berhasil dihapus."));
+  }
+};
+
+const listContact = () => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  console.log(chalk.cyan.inverse(`Daftar Kontak (${contacts.length}):`));
+  contacts.forEach((c, i) => {
+    console.log(`${i + 1}. ${c.nama} - ${c.nohp}`);
+  });
+};
+
+const detailContact = (nama) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  const contact = contacts.find(
+    (c) => c.nama.toLowerCase() === nama.toLowerCase()
+  );
+
+  if (!contact) {
+    console.log(chalk.red.inverse.bold("Kontak tidak ditemukan"));
+    return;
+  }
+
+  console.log(chalk.cyan.inverse.bold("Detail Kontak:"));
+  console.log(`Nama  : ${contact.nama}`);
+  console.log(
+    `Email : ${contact.email || chalk.yellow.inverse("Email tidak ada.")}`
+  );
+  console.log(`No HP : ${contact.nohp}`);
+};
+
+const editContact = (nama, email, nohp) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  let index = contacts.findIndex(
+    (c) => c.nama.toLowerCase() === nama.toLowerCase()
+  );
+
+  if (index === -1) {
+    console.log(chalk.red.inverse.bold("Kontak tidak ditemukan!"));
+    return;
+  }
+
+  // validasi
+  if (email && !validator.isEmail(email)) {
+    console.log(chalk.red.inverse.bold("Email tidak valid!"));
+    return;
+  }
+  if (!validator.isMobilePhone(nohp, "id-ID")) {
+    console.log(chalk.red.inverse.bold("Nomor hp tidak valid!"));
+    return;
+  }
+
+  // update
+  contacts[index] = { nama, email, nohp };
+  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2));
+  console.log(chalk.green.inverse("Kontak berhasil diubah."));
+};
+
+module.exports = {
+  simpanContact,
+  hapusContact,
+  listContact,
+  detailContact,
+  editContact,
+};
