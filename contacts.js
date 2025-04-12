@@ -122,10 +122,34 @@ const editContact = (nama, email, nohp) => {
   console.log(chalk.green.inverse("Kontak berhasil diubah."));
 };
 
+const searchContact = (nama) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  const results = contacts.filter((c) => {
+    return c.nama.toLowerCase().includes(nama.toLowerCase());
+  });
+
+  if (results.length === 0) {
+    console.log(chalk.red.inverse.bold("Kontak tidak ditemukan!"));
+    return;
+  }
+
+  console.log(
+    chalk.cyan.inverse.bold(
+      `Ditemukan ${results.length} kontak dengan nama '${nama}':`
+    )
+  );
+  results.forEach((contact, i) => {
+    console.log(`${i + 1}. ${contact.nama} - ${contact.noHP}`);
+  });
+};
+
 module.exports = {
   simpanContact,
   hapusContact,
   listContact,
   detailContact,
   editContact,
+  searchContact,
 };

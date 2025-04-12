@@ -5,6 +5,7 @@ const {
   listContact,
   detailContact,
   editContact,
+  searchContact,
 } = require("./contacts");
 
 yargs
@@ -100,6 +101,21 @@ yargs
     handler(argv) {
       console.log("Mengedit kontak...");
       editContact(argv.nama, argv.email, argv.nohp);
+    },
+  })
+  .command({
+    command: "search",
+    describe: "Mencari kontak sesuai nama",
+    builder: {
+      nama: {
+        type: "string",
+        demandOption: true,
+        describe: "Nama yang dicari",
+      },
+    },
+    handler(argv) {
+      console.log("Mencari kontak...");
+      searchContact(argv.nama);
     },
   })
   .demandCommand(1)

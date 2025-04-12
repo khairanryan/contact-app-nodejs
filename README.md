@@ -9,6 +9,7 @@ Aplikasi CLI sederhana untuk menyimpan, melihat, dan mengelola kontak menggunaka
 - Melihat daftar kontak
 - Melihat detail kontak
 - Mengedit kontak yang sudah ada
+- Mencari kontak berdasarkan nama
 - Validasi:
   - Nama tidak boleh duplikat
   - Format email harus valid (jika diisi)
@@ -73,6 +74,14 @@ node app.js detail --nama="John Doe"
 ```bash
 node app.js edit --nama="John Doe" --email="johnny@example.com" --nohp="089876543210"
 ```
+
+### Mencari Kontak
+
+```bash
+node app.js search --nama="John"
+```
+
+Fitur ini akan mencari dan menampilkan semua kontak yang mengandung kata kunci sesuai dengan nama yang diberikan, tidak harus 100% sama.
 
 ## 📦 Dependensi
 
