@@ -14,8 +14,8 @@ if (!fs.existsSync(dataPath)) {
   fs.writeFileSync(dataPath, "[]", "utf-8");
 }
 
-const simpanContact = (nama, email, nohp) => {
-  const contact = { nama, email, nohp };
+const simpanContact = (nama, email, noHP) => {
+  const contact = { nama, email, noHP, dibuat: new Date().toISOString() };
   const fileBuffer = fs.readFileSync(dataPath, "utf-8");
   const contacts = JSON.parse(fileBuffer);
 
@@ -35,7 +35,7 @@ const simpanContact = (nama, email, nohp) => {
   }
 
   // cek nomor hp
-  if (!validator.isMobilePhone(nohp, "id-ID")) {
+  if (!validator.isMobilePhone(noHP, "id-ID")) {
     console.log(chalk.red.inverse.bold("Nomor hp tidak valid!"));
     return false;
   }
@@ -68,7 +68,67 @@ const listContact = () => {
 
   console.log(chalk.cyan.inverse(`Daftar Kontak (${contacts.length}):`));
   contacts.forEach((c, i) => {
-    console.log(`${i + 1}. ${c.nama} - ${c.nohp}`);
+    console.log(`${i + 1}. ${c.nama} - ${c.noHP}`);
+    if (c.dibuat) {
+      console.log(
+        `    📅 Dibuat: ${new Date(c.dibuat).toLocaleString("id-ID")}`
+      );
+    }
+  });
+};
+
+const listContactProvider = (namaProvider) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  const providerPrefixes = {
+    telkomsel: ["0811", "0812", "0813", "0821", "0822", "0852", "0853", "0823"],
+    indosat: ["0814", "0815", "0816", "0855", "0856", "0857", "0858"],
+    xl: ["0817", "0818", "0819", "0859", "0877", "0878"],
+    tri: ["0895", "0896", "0897", "0898", "0899"],
+    smartfren: [
+      "0881",
+      "0882",
+      "0883",
+      "0884",
+      "0885",
+      "0886",
+      "0887",
+      "0888",
+      "0889",
+    ],
+    axis: ["0831", "0832", "0833", "0838"],
+    "by.u": ["0851"],
+  };
+
+  const prefix = providerPrefixes[namaProvider.toLowerCase()];
+
+  if (!prefix) {
+    console.log(
+      chalk.red.inverse.bold(`Provider '${namaProvider}' tidak dikenali.`)
+    );
+    return;
+  }
+
+  const filtered = contacts.filter((c) => {
+    const awal = c.noHP.slice(0, 4);
+    return prefix.includes(awal);
+  });
+
+  if (filtered.length === 0) {
+    console.log(
+      chalk.red.inverse.bold(`Tidak ada kontak dari provider '${namaProvider}'`)
+    );
+    return;
+  }
+
+  console.log(
+    chalk.cyan.inverse.bold(
+      `Daftar kontak provider '${namaProvider}' (${filtered.length}):`
+    )
+  );
+  filtered.forEach((c, i) => {
+    console.log(`${i + 1}. ${c.nama} - ${c.noHP}`);
   });
 };
 
@@ -90,10 +150,10 @@ const detailContact = (nama) => {
   console.log(
     `Email : ${contact.email || chalk.yellow.inverse("Email tidak ada.")}`
   );
-  console.log(`No HP : ${contact.nohp}`);
+  console.log(`No HP : ${contact.noHP}`);
 };
 
-const editContact = (nama, email, nohp) => {
+const editContact = (nama, email, noHP) => {
   const fileBuffer = fs.readFileSync(dataPath, "utf-8");
   const contacts = JSON.parse(fileBuffer);
 
@@ -111,13 +171,13 @@ const editContact = (nama, email, nohp) => {
     console.log(chalk.red.inverse.bold("Email tidak valid!"));
     return;
   }
-  if (!validator.isMobilePhone(nohp, "id-ID")) {
+  if (!validator.isMobilePhone(noHP, "id-ID")) {
     console.log(chalk.red.inverse.bold("Nomor hp tidak valid!"));
     return;
   }
 
   // update
-  contacts[index] = { nama, email, nohp };
+  contacts[index] = { nama, email, noHP };
   fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2));
   console.log(chalk.green.inverse("Kontak berhasil diubah."));
 };
@@ -145,11 +205,77 @@ const searchContact = (nama) => {
   });
 };
 
+const statsContact = () => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+  let haveEmail = 0;
+  let noEmail = 0;
+
+  contacts.forEach((contact) => {
+    if (contact.email) {
+      haveEmail += 1;
+    }
+    if (!contact.email) {
+      noEmail += 1;
+    }
+  });
+
+  console.log(chalk.yellow.inverse.bold(`Total Kontak: ${contacts.length}`));
+  console.log(`- Dengan Email   : ${haveEmail}`);
+  console.log(`- Tanpa Email    : ${noEmail}`);
+};
+
+const listContactWithDomain = (domain) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  const filtered = contacts.filter((c) => {
+    return c.email && c.email.endsWith(domain);
+  });
+
+  if (filtered.length === 0) {
+    console.log(
+      chalk.red.inverse.bold(`Tidak ada kontak dengan domain '${domain}'`)
+    );
+    return;
+  }
+
+  console.log(chalk.cyan.inverse.bold(`Kontak dengan domain '${domain}':`));
+  filtered.forEach((c, i) => {
+    console.log(`${i + 1}. ${c.nama} - ${c.email}`);
+  });
+};
+
+const cariNoHP = (nomor) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  const hasil = contacts.filter((c) => c.noHP.includes(nomor));
+
+  if (hasil.length === 0) {
+    console.log(
+      chalk.red.inverse.bold(
+        `Nomor telepon yang dicari tidak terdaftar, nomor: ${nomor}`
+      )
+    );
+    return;
+  }
+
+  console.log(chalk.green.inverse.bold(`Kontak dengan nomor '${nomor}': `));
+  hasil.forEach((c, i) => {
+    console.log(`${i + 1}. ${c.nama} - ${c.noHP}`);
+  });
+};
+
 module.exports = {
   simpanContact,
   hapusContact,
   listContact,
+  listContactProvider,
   detailContact,
   editContact,
   searchContact,
+  statsContact,
+  listContactWithDomain,
+  cariNoHP,
 };

@@ -1,20 +1,28 @@
 # Contact App NodeJS 📇
 
-Aplikasi CLI sederhana untuk menyimpan, melihat, dan mengelola kontak menggunakan Node.js. Mendukung validasi input dan penyimpanan data ke file JSON.
+Aplikasi Command Line Interface (CLI) sederhana untuk mengelola daftar kontak menggunakan **Node.js**. Fitur lengkap mulai dari tambah, hapus, cari, filter, hingga statistik kontak berdasarkan email. Cocok buat belajar `Node.js`, `yargs`, dan file handling JSON!
 
-## 📦 Fitur
+![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)
+![Made with Node.js](https://img.shields.io/badge/Made%20with-Node.js-green.svg)
 
-- Menambahkan kontak baru
-- Menghapus kontak berdasarkan nama
-- Melihat daftar kontak
-- Melihat detail kontak
-- Mengedit kontak yang sudah ada
-- Mencari kontak berdasarkan nama
-- Validasi:
-  - Nama tidak boleh duplikat
-  - Format email harus valid (jika diisi)
-  - Nomor HP harus valid (format Indonesia)
-- Menyimpan data ke dalam file `contacts.json`
+---
+
+## ✨ Fitur Utama
+
+- ✅ Tambah, hapus, edit kontak
+- 🔍 Cari kontak berdasarkan nama / nomor HP
+- 📑 Lihat detail dan daftar semua kontak
+- 🧠 Filter berdasarkan:
+  - Provider nomor HP (Telkomsel, Indosat, dll)
+  - Domain email (`@gmail.com`, `@yahoo.com`, dst.)
+- 📊 Statistik jumlah kontak dengan dan tanpa email
+- ✅ Validasi:
+  - Nama tidak duplikat
+  - Nomor HP valid (Indonesia)
+  - Email valid (jika diisi)
+- 💾 Penyimpanan data lokal ke file `contacts.json`
+
+---
 
 ## 📁 Struktur Proyek
 
@@ -28,60 +36,83 @@ Aplikasi CLI sederhana untuk menyimpan, melihat, dan mengelola kontak menggunaka
 └── README.md
 ```
 
-## 🚀 Instalasi
+## ⚙️ Instalasi
 
 1. Clone repositori ini:
 
 ```bash
 git clone https://github.com/username/contact-app-nodejs.git
 cd contact-app-nodejs
+npm install
 ```
 
-2. Install dependensi:
+2. Install semua dependensi otomatis:
 
 ```bash
-npm install chalk validator yargs
+npm i
 ```
 
-## 🧑‍💻 Penggunaan
+## 🧑‍💻 Cara Penggunaan
 
-### Menambahkan Kontak
+### ➕ Tambah Kontak
 
 ```bash
 node app.js add --nama="John Doe" --email="john@example.com" --nohp="081234567890"
 ```
 
-### Menghapus Kontak
+### 🗑️ Hapus Kontak
 
 ```bash
 node app.js remove --nama="John Doe"
 ```
 
-### Menampilkan Daftar Kontak
+### 📋 Lihat Semua Kontak
 
 ```bash
 node app.js list
 ```
 
-### Menampilkan Detail Kontak
+### 🔎 Lihat Detail Kontak
 
 ```bash
 node app.js detail --nama="John Doe"
 ```
 
-### Mengedit Kontak
+### ✏️ Edit Kontak
 
 ```bash
 node app.js edit --nama="John Doe" --email="johnny@example.com" --nohp="089876543210"
 ```
 
-### Mencari Kontak
+### 🔍 Cari Nama
 
 ```bash
 node app.js search --nama="John"
 ```
 
-Fitur ini akan mencari dan menampilkan semua kontak yang mengandung kata kunci sesuai dengan nama yang diberikan, tidak harus 100% sama.
+### 🔎 Cari Nomor HP
+
+```bash
+node app.js search-phone --noHP="0812"
+```
+
+### 📡 Filter Berdasarkan Provider
+
+```bash
+node app.js list-provider --provider="telkomsel"
+```
+
+### 📬 Filter Email Berdasarkan Domain
+
+```bash
+node app.js filter-email --domain="@gmail.com"
+```
+
+### 📊 Statistik Kontak (Email vs Tidak Ada Email)
+
+```bash
+node app.js stats
+```
 
 ## 📦 Dependensi
 
@@ -90,8 +121,8 @@ Fitur ini akan mencari dan menampilkan semua kontak yang mengandung kata kunci s
 - [Chalk](https://www.npmjs.com/package/chalk)
 - [Validator](https://www.npmjs.com/package/validator)
 
-## 📝 Lisensi
+## 📜 Lisensi
 
-Bebas digunakan untuk belajar dan eksplorasi. Tidak untuk diperjualbelikan tanpa izin.
+MIT License – Bebas digunakan untuk pembelajaran dan eksplorasi.
 
 Selamat ngoding! 🚀

@@ -3,9 +3,13 @@ const {
   simpanContact,
   hapusContact,
   listContact,
+  listContactProvider,
   detailContact,
   editContact,
   searchContact,
+  statsContact,
+  listContactWithDomain,
+  cariNoHP,
 } = require("./contacts");
 
 yargs
@@ -18,15 +22,15 @@ yargs
     builder: {
       nama: {
         type: "string",
-        demandOption: true,
+        demandOption: true, //wajib diisi
         describe: "Nama Lengkap",
       },
       email: {
         type: "string",
-        demandOption: false,
+        demandOption: false, //tidak wajib diisi
         describe: "Email",
       },
-      nohp: {
+      noHP: {
         type: "string",
         demandOption: true,
         describe: "Nomor Telephone",
@@ -34,7 +38,7 @@ yargs
     },
     handler(argv) {
       console.log("Menambahkan kontak...");
-      simpanContact(argv.nama, argv.email, argv.nohp);
+      simpanContact(argv.nama, argv.email, argv.noHP);
     },
   })
   // remove
@@ -52,13 +56,30 @@ yargs
       hapusContact(argv.nama);
     },
   })
-  // list
+  // list Contact
   .command({
     command: "list",
     describe: "List kontak yang sudah ada",
     handler() {
       console.log("Menampilkan list kontak...");
       listContact();
+    },
+  })
+
+  // List Contact Provider
+  .command({
+    command: "list-provider",
+    describe: "Menampilkan list kontak berdasarkan provider",
+    builder: {
+      provider: {
+        type: "string",
+        describe: "Masukkan nama provider (contoh: telkomsel)",
+        demandOption: true,
+      },
+    },
+    handler(argv) {
+      console.log("Menampilkan list kontak berdasarkan provider...");
+      listContactProvider(argv.provider);
     },
   })
   // detail
@@ -92,7 +113,7 @@ yargs
         demandOption: false,
         describe: "Email",
       },
-      nohp: {
+      noHP: {
         type: "string",
         demandOption: true,
         describe: "Nomor Telephone",
@@ -100,7 +121,7 @@ yargs
     },
     handler(argv) {
       console.log("Mengedit kontak...");
-      editContact(argv.nama, argv.email, argv.nohp);
+      editContact(argv.nama, argv.email, argv.noHP);
     },
   })
   .command({
@@ -116,6 +137,44 @@ yargs
     handler(argv) {
       console.log("Mencari kontak...");
       searchContact(argv.nama);
+    },
+  })
+  .command({
+    command: "stats",
+    describe: "Menampilkan total kontak yang memiliki email atau tidak",
+    handler() {
+      console.log("Stats kontak...");
+      statsContact();
+    },
+  })
+  .command({
+    command: "filter-email",
+    describe: "Menampilkan email berdasarkan domain",
+    builder: {
+      domain: {
+        type: "string",
+        demandOption: true,
+        describe: "Masukkan domain email (contoh:@gmail.com)",
+      },
+    },
+    handler(argv) {
+      console.log("Menampilkan kontak berdasarkan domain email...");
+      listContactWithDomain(argv.domain);
+    },
+  })
+  .command({
+    command: "search-phone",
+    describe: "Mencari kontak berdasarkan nomor telepon",
+    builder: {
+      noHP: {
+        type: "string",
+        describe: "Nomor telepone yang dicari",
+        demandOption: true,
+      },
+    },
+    handler(argv) {
+      console.log("Menampilkan kontak berdasarkan nomor telepon...");
+      cariNoHP(argv.noHP);
     },
   })
   .demandCommand(1)
