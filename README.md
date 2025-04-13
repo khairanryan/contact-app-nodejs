@@ -21,6 +21,7 @@ Aplikasi Command Line Interface (CLI) sederhana untuk mengelola daftar kontak me
   - Nomor HP valid (Indonesia)
   - Email valid (jika diisi)
 - 💾 Penyimpanan data lokal ke file `contacts.json`
+- ✏️ Mengubah nama kontak lama ke nama kontak baru
 
 ---
 
@@ -112,6 +113,12 @@ node app.js filter-email --domain="@gmail.com"
 
 ```bash
 node app.js stats
+```
+
+### ✏️ Ubah Nama Kontak
+
+```bash
+node app.js rename --namaLama="John" --namaBaru="Johnny"
 ```
 
 ## 📦 Dependensi
