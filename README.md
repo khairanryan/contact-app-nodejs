@@ -9,19 +9,14 @@ Aplikasi Command Line Interface (CLI) sederhana untuk mengelola daftar kontak me
 
 ## ✨ Fitur Utama
 
-- ✅ Tambah, hapus, edit kontak
-- 🔍 Cari kontak berdasarkan nama / nomor HP
+- ✅ Tambah, hapus, update kontak
 - 📑 Lihat detail dan daftar semua kontak
+- 🔍 Cari kontak berdasarkan nama / nomor HP
 - 🧠 Filter berdasarkan:
   - Provider nomor HP (Telkomsel, Indosat, dll)
   - Domain email (`@gmail.com`, `@yahoo.com`, dst.)
 - 📊 Statistik jumlah kontak dengan dan tanpa email
-- ✅ Validasi:
-  - Nama tidak duplikat
-  - Nomor HP valid (Indonesia)
-  - Email valid (jika diisi)
 - 💾 Penyimpanan data lokal ke file `contacts.json`
-- ✏️ Mengubah nama kontak lama ke nama kontak baru
 
 ---
 
@@ -67,6 +62,12 @@ node app.js add --nama="John Doe" --email="john@example.com" --nohp="08123456789
 node app.js remove --nama="John Doe"
 ```
 
+### ✏️ Update Kontak (Nama <optional>, Email <optional>, atau noHP <optional>)
+
+```bash
+node app.js update --nama="John" --namaBaru="Johnny"
+```
+
 ### 📋 Lihat Semua Kontak
 
 ```bash
@@ -79,19 +80,13 @@ node app.js list
 node app.js detail --nama="John Doe"
 ```
 
-### ✏️ Edit Kontak
-
-```bash
-node app.js edit --nama="John Doe" --email="johnny@example.com" --nohp="089876543210"
-```
-
-### 🔍 Cari Nama
+### 🔍 Cari Kontak Berdasarkan Nama
 
 ```bash
 node app.js search --nama="John"
 ```
 
-### 🔎 Cari Nomor HP
+### 🔎 Cari Kontak Berdasarkan Nomor HP
 
 ```bash
 node app.js search-phone --noHP="0812"
@@ -109,16 +104,10 @@ node app.js list-provider --provider="telkomsel"
 node app.js filter-email --domain="@gmail.com"
 ```
 
-### 📊 Statistik Kontak (Email vs Tidak Ada Email)
+### 📊 Statistik Kontak (Email & Tidak Ada Email)
 
 ```bash
 node app.js stats
-```
-
-### ✏️ Ubah Nama Kontak
-
-```bash
-node app.js rename --namaLama="John" --namaBaru="Johnny"
 ```
 
 ## 📦 Dependensi

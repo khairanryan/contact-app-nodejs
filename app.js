@@ -2,15 +2,14 @@ const yargs = require("yargs");
 const {
   simpanContact,
   hapusContact,
+  updateContact,
   listContact,
   listContactProvider,
   detailContact,
-  editContact,
   searchContact,
   statsContact,
   listContactWithDomain,
   cariNoHP,
-  renameContact,
 } = require("./contacts");
 
 yargs
@@ -57,6 +56,41 @@ yargs
       hapusContact(argv.nama);
     },
   })
+  // update contact
+  .command({
+    command: "update",
+    describe: "Mengubah nama, email, atau noHP",
+    builder: {
+      nama: {
+        type: "string",
+        describe: "Nama kontak",
+        demandOption: true,
+      },
+      namaBaru: {
+        type: "string",
+        describe: "Nama baru kontak (opsional)",
+        demandOption: false,
+      },
+      email: {
+        type: "string",
+        describe: "Email baru kontak (opsional)",
+        demandOption: false,
+      },
+      noHP: {
+        type: "string",
+        describe: "Nomor telepon baru kontak (opsional)",
+        demandOption: false,
+      },
+    },
+    handler(argv) {
+      console.log("Mengupdate kontak...");
+      updateContact(argv.nama, {
+        namaBaru: argv.namaBaru,
+        email: argv.email,
+        noHP: argv.noHP,
+      });
+    },
+  })
   // list Contact
   .command({
     command: "list",
@@ -97,32 +131,6 @@ yargs
     handler(argv) {
       console.log("Menampilkan detail kontak...");
       detailContact(argv.nama);
-    },
-  })
-  // edit
-  .command({
-    command: "edit",
-    describe: "Mengubah data kontak sesuai nama",
-    builder: {
-      nama: {
-        type: "string",
-        demandOption: true,
-        describe: "Nama Lengkap",
-      },
-      email: {
-        type: "string",
-        demandOption: false,
-        describe: "Email",
-      },
-      noHP: {
-        type: "string",
-        demandOption: true,
-        describe: "Nomor Telephone",
-      },
-    },
-    handler(argv) {
-      console.log("Mengedit kontak...");
-      editContact(argv.nama, argv.email, argv.noHP);
     },
   })
   .command({
@@ -176,26 +184,6 @@ yargs
     handler(argv) {
       console.log("Menampilkan kontak berdasarkan nomor telepon...");
       cariNoHP(argv.noHP);
-    },
-  })
-  .command({
-    command: "rename",
-    describe: "Mengganti nama kontak",
-    builder: {
-      namaLama: {
-        type: "string",
-        describe: "Masukkan nama lama",
-        demandOption: true,
-      },
-      namaBaru: {
-        type: "string",
-        describe: "Masukkan nama baru",
-        demandOption: true,
-      },
-    },
-    handler(argv) {
-      console.log("Mengubah nama kontak...");
-      renameContact(argv.namaLama, argv.namaBaru);
     },
   })
   .demandCommand(1)

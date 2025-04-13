@@ -62,6 +62,59 @@ const hapusContact = (nama) => {
   }
 };
 
+const updateContact = (namaLama, { namaBaru, email, noHP }) => {
+  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
+  const contacts = JSON.parse(fileBuffer);
+
+  let index = contacts.findIndex(
+    (c) => c.nama.toLowerCase() === namaLama.toLowerCase()
+  );
+
+  if (index === -1) {
+    console.log(
+      chalk.red.inverse.bold(`Kontak '${namaLama}' tidak ditemukan!`)
+    );
+    return;
+  }
+
+  // jika ganti nama, cek duplikat
+  if (
+    namaBaru &&
+    namaLama.toLowerCase() !== namaBaru.toLowerCase() &&
+    contacts.some((c) => c.nama.toLowerCase() === namaBaru.toLowerCase())
+  ) {
+    console.log(
+      chalk.red.inverse.bold(`Nama kontak '${namaBaru}' sudah terdaftar`)
+    );
+    return;
+  }
+
+  // validasi email jika ada
+  if (email && !validator.isEmail(email)) {
+    console.log(chalk.red.inverse.bold("Email tidak valid!"));
+    return;
+  }
+
+  // validasi nomor hp juga jika ada
+  if (noHP && validator.isMobilePhone(noHP, "id-ID")) {
+    console.log(chalk.red.inverse.bold("Nomor telepon tidak valid!"));
+    return;
+  }
+
+  // mengubah object kontak berdasarkan index pada file json
+  const contact = contacts[index];
+  contacts[index] = {
+    ...contact,
+    nama: namaBaru || contact.nama,
+    email: email || contact.email,
+    noHP: noHP || contact.noHP,
+  };
+
+  // simpan perubahan file
+  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2));
+  console.log(chalk.green.inverse(`Kontak '${namaLama}' berhasil diperbarui.`));
+};
+
 const listContact = () => {
   const fileBuffer = fs.readFileSync(dataPath, "utf-8");
   const contacts = JSON.parse(fileBuffer);
@@ -153,36 +206,6 @@ const detailContact = (nama) => {
   console.log(`No HP : ${contact.noHP}`);
 };
 
-const editContact = (nama, email, noHP) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
-
-  let index = contacts.findIndex(
-    (c) => c.nama.toLowerCase() === nama.toLowerCase()
-  );
-
-  if (index === -1) {
-    console.log(chalk.red.inverse.bold("Kontak tidak ditemukan!"));
-    return;
-  }
-
-  // validasi
-  if (email && !validator.isEmail(email)) {
-    console.log(chalk.red.inverse.bold("Email tidak valid!"));
-    return;
-  }
-  if (!validator.isMobilePhone(noHP, "id-ID")) {
-    console.log(chalk.red.inverse.bold("Nomor hp tidak valid!"));
-    return;
-  }
-
-  // update
-  const contact = contacts[index];
-  contacts[index] = { ...contact, nama, email, noHP };
-  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2));
-  console.log(chalk.green.inverse("Kontak berhasil diubah."));
-};
-
 const searchContact = (nama) => {
   const fileBuffer = fs.readFileSync(dataPath, "utf-8");
   const contacts = JSON.parse(fileBuffer);
@@ -268,58 +291,15 @@ const cariNoHP = (nomor) => {
   });
 };
 
-const renameContact = (namaLama, namaBaru) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
-
-  // cari index dari nama lama
-  let index = contacts.findIndex(
-    (c) => c.nama.toLowerCase() === namaLama.toLowerCase()
-  );
-
-  // jika nama lama tidak ada
-  if (index === -1) {
-    console.log(
-      chalk.red.inverse.bold(`Nama kontak '${namaLama}' tidak terdaftar!`)
-    );
-    return;
-  }
-
-  // pastikan nama baru belum dipakai kontak lain
-  const isDuplikat = contacts.some(
-    (c) => c.nama.toLowerCase() === namaBaru.toLowerCase()
-  );
-  if (isDuplikat) {
-    console.log(
-      chalk.red.inverse.bold(`Nama kontak '${namaBaru}' telah digunakan!`)
-    );
-    return;
-  }
-
-  // ubah nama
-  const contactLama = contacts[index];
-  contacts[index] = {
-    ...contactLama,
-    nama: namaBaru,
-  };
-  fs.writeFileSync(dataPath, JSON.stringify(contacts, null, 2));
-  console.log(
-    chalk.green.inverse(
-      `Kontak '${namaLama}' berhasil diubah menjadi '${namaBaru}'.`
-    )
-  );
-};
-
 module.exports = {
   simpanContact,
   hapusContact,
+  updateContact,
   listContact,
   listContactProvider,
   detailContact,
-  editContact,
   searchContact,
   statsContact,
   listContactWithDomain,
   cariNoHP,
-  renameContact,
 };
