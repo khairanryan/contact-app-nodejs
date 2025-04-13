@@ -10,6 +10,7 @@ const {
   statsContact,
   listContactWithDomain,
   cariNoHP,
+  renameContact,
 } = require("./contacts");
 
 yargs
@@ -175,6 +176,26 @@ yargs
     handler(argv) {
       console.log("Menampilkan kontak berdasarkan nomor telepon...");
       cariNoHP(argv.noHP);
+    },
+  })
+  .command({
+    command: "rename",
+    describe: "Mengganti nama kontak",
+    builder: {
+      namaLama: {
+        type: "string",
+        describe: "Masukkan nama lama",
+        demandOption: true,
+      },
+      namaBaru: {
+        type: "string",
+        describe: "Masukkan nama baru",
+        demandOption: true,
+      },
+    },
+    handler(argv) {
+      console.log("Mengubah nama kontak...");
+      renameContact(argv.namaLama, argv.namaBaru);
     },
   })
   .demandCommand(1)
