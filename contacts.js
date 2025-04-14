@@ -14,10 +14,15 @@ if (!fs.existsSync(dataPath)) {
   fs.writeFileSync(dataPath, "[]", "utf-8");
 }
 
-const simpanContact = (nama, email, noHP) => {
-  const contact = { nama, email, noHP, dibuat: new Date().toISOString() };
+const loadContact = () => {
   const fileBuffer = fs.readFileSync(dataPath, "utf-8");
   const contacts = JSON.parse(fileBuffer);
+  return contacts;
+};
+
+const simpanContact = (nama, email, noHP) => {
+  const contact = { nama, email, noHP, dibuat: new Date().toISOString() };
+  const contacts = loadContact();
 
   // cek duplikat
   const duplikat = contacts.find((contact) => contact.nama === nama);
@@ -47,8 +52,7 @@ const simpanContact = (nama, email, noHP) => {
 };
 
 const hapusContact = (nama) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   const filtered = contacts.filter(
     (c) => c.nama.toLowerCase() !== nama.toLowerCase()
@@ -63,8 +67,7 @@ const hapusContact = (nama) => {
 };
 
 const updateContact = (namaLama, { namaBaru, email, noHP }) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   let index = contacts.findIndex(
     (c) => c.nama.toLowerCase() === namaLama.toLowerCase()
@@ -116,8 +119,7 @@ const updateContact = (namaLama, { namaBaru, email, noHP }) => {
 };
 
 const listContact = () => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   console.log(chalk.cyan.inverse(`Daftar Kontak (${contacts.length}):`));
   contacts.forEach((c, i) => {
@@ -131,8 +133,7 @@ const listContact = () => {
 };
 
 const listContactProvider = (namaProvider) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   const providerPrefixes = {
     telkomsel: ["0811", "0812", "0813", "0821", "0822", "0852", "0853", "0823"],
@@ -186,8 +187,7 @@ const listContactProvider = (namaProvider) => {
 };
 
 const detailContact = (nama) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   const contact = contacts.find(
     (c) => c.nama.toLowerCase() === nama.toLowerCase()
@@ -207,8 +207,7 @@ const detailContact = (nama) => {
 };
 
 const searchContact = (nama) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   const results = contacts.filter((c) => {
     return c.nama.toLowerCase().includes(nama.toLowerCase());
@@ -230,8 +229,7 @@ const searchContact = (nama) => {
 };
 
 const statsContact = () => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
   let haveEmail = 0;
   let noEmail = 0;
 
@@ -250,8 +248,7 @@ const statsContact = () => {
 };
 
 const listContactWithDomain = (domain) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   const filtered = contacts.filter((c) => {
     return c.email && c.email.endsWith(domain);
@@ -271,8 +268,7 @@ const listContactWithDomain = (domain) => {
 };
 
 const cariNoHP = (nomor) => {
-  const fileBuffer = fs.readFileSync(dataPath, "utf-8");
-  const contacts = JSON.parse(fileBuffer);
+  const contacts = loadContact();
 
   const hasil = contacts.filter((c) => c.noHP.includes(nomor));
 
