@@ -1,4 +1,4 @@
-# Contact App NodeJS 📇
+# Contact CLI NodeJS 📇
 
 Aplikasi Command Line Interface (CLI) sederhana untuk mengelola daftar kontak menggunakan **Node.js**. Fitur lengkap mulai dari tambah, hapus, cari, filter, hingga statistik kontak berdasarkan email. Cocok buat belajar `Node.js`, `yargs`, dan file handling JSON!
 
